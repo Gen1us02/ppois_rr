@@ -1,14 +1,10 @@
 #pragma once
 
-#include <string>
 #include <vector>
+#include <string>
 #include <cstring>
-#include <fstream>
-#include <sstream>
-#include "../graph/graph.hpp"
 
 class Utils{
 public:
-    static void readCSV(const std::string& filename, Graph& graph);
-    static std::vector<std::string> split(std::string& line);
+    static std::vector<std::string> splitData(std::string& data, const std::string& sep);
 };
