@@ -16,6 +16,7 @@ void ScAgentCreateGraph::GetOrCreatePage(ScAddr & pageNode, const std::string& p
         std::string pageIdentificator = DEFAULT_PAGE_NAME + std::to_string(this->next_page);
         m_context.SetElementSystemIdentifier(pageIdentificator, pageNode);
         CreateMainIdntf(pageNode, pageName);
+        ScAddr const & pageClassConnector = m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::concept_page, pageNode);
         this->pagesIdentificators_[pageName] = pageIdentificator;
         this->next_page++;
     }
@@ -68,7 +69,6 @@ ScResult ScAgentCreateGraph::DoProgram(ScActionInitiatedEvent const & event, ScA
         ScAddr pageNode;
         GetOrCreatePage(pageNode, pageName);
         m_logger.Debug("Create page node");
-        ScAddr const & pageClassConnector = m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::concept_page, pageNode);
         m_logger.Debug("Create page class connector");
         ScAddr const & visitorsNode = m_context.GenerateNode(ScType::ConstNode);
         CreateMainIdntf(visitorsNode, visitorsCount);
