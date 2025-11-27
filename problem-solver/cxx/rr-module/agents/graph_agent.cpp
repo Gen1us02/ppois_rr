@@ -100,5 +100,7 @@ ScResult ScAgentCreateGraph::DoProgram(ScActionInitiatedEvent const & event, ScA
         }
     }
     
+    ScAddr const & firstPage = m_context.SearchElementBySystemIdentifier("page_0");
+    m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::concept_successfuly_created_graph, firstPage);
     return action.FinishSuccessfully();
 }
