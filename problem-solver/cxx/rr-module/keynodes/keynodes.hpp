@@ -14,4 +14,6 @@ public:
     static inline ScKeynode const nrel_out_degree{"nrel_out_degree", ScType::ConstNodeNonRole};
     static inline ScKeynode const nrel_in_degree{"nrel_in_degree", ScType::ConstNodeNonRole};
     static inline ScKeynode const nrel_dead_end{"nrel_dead_end", ScType::ConstNodeNonRole};
+    static inline ScKeynode const nrel_source_page{"nrel_source_page", ScType::ConstNodeNonRole};
+    static inline ScKeynode const nrel_popular_page{"nrel_popular_page", ScType::ConstNodeNonRole};
 };

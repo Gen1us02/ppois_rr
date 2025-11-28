@@ -30,6 +30,8 @@ ScResult ScHalfDegreeAgent::DoProgram(SuccessfulyGraphCreationEvent const &event
     m_logger.Debug("Started collecting pages.");
     GetPagesVector();
     m_logger.Debug("Collected pages successfuly.");
+
+    int sourceMax = 0, popularMax = 0;
     
     for(const auto & page: pages_) {
         m_logger.Debug(m_context.GetElementSystemIdentifier(page));
@@ -56,10 +58,22 @@ ScResult ScHalfDegreeAgent::DoProgram(SuccessfulyGraphCreationEvent const &event
         }
         m_logger.Debug(inPages);
 
+        popularPages_[inPages].insert(page);
+
+        if (inPages > popularMax) {
+            popularMax = inPages;
+        }
+
         while(outPagesIterator->Next()) {
             outPages++;
         }
         m_logger.Debug(outPages);
+
+        sourcePages_[outPages].insert(page);
+
+        if (outPages > sourceMax) {
+            sourceMax = outPages;
+        }
 
         CreateDegreeLinks(page, outPages, "out");
         CreateDegreeLinks(page, inPages, "in");
@@ -69,7 +83,32 @@ ScResult ScHalfDegreeAgent::DoProgram(SuccessfulyGraphCreationEvent const &event
         }
     }
 
+    CreateSourceAndPopularLinks(popularMax, sourceMax);
+
     return action.FinishSuccessfully();
+}
+
+void ScHalfDegreeAgent::CreateSourceAndPopularLinks(const int & popularMax, const int & sourceMax) {
+    const auto & sourceSet = sourcePages_[sourceMax];
+    const auto & popularSet = popularPages_[popularMax];
+
+    for(const auto & sourcePage: sourceSet) {
+        ScAddr const & sourcePageLink = m_context.GenerateLink();
+        m_context.SetLinkContent(sourcePageLink, "This page is a source page.");
+        ScAddr sourcePageConnector = m_context.GenerateConnector(ScType::ConstCommonArc, sourcePage, sourcePageLink);
+
+        m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::nrel_source_page, sourcePageConnector);
+        m_logger.Debug("Successfuly create source page for" + m_context.GetElementSystemIdentifier(sourcePage));
+    }
+
+    for(const auto & popularPage: popularSet) {
+        ScAddr const & popularPageLink = m_context.GenerateLink();
+        m_context.SetLinkContent(popularPageLink, "This page is a popular page.");
+        ScAddr popularPageConnector = m_context.GenerateConnector(ScType::ConstCommonArc, popularPage, popularPageLink);
+
+        m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::nrel_popular_page, popularPageConnector);
+        m_logger.Debug("Successfuly create popular page for" + m_context.GetElementSystemIdentifier(popularPage));
+    }
 }
 
 void ScHalfDegreeAgent::CreateDeadEndLinks(ScAddr const & page) {
