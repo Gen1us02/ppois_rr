@@ -2,6 +2,7 @@
 
 #include <sc-memory/sc_module.hpp>
 
-class RRModule : public ScModule{
+class RRModule : public ScModule
+{
 public:
 };
