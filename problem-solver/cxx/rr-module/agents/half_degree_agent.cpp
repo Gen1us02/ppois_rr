@@ -27,11 +27,41 @@ ScTemplate ScHalfDegreeAgent::GetInitiationConditionTemplate(SuccessfulyGraphCre
   return templ;
 }
 
+ScAddr ScHalfDegreeAgent::GetStructConnector(ScAddr const & page, ScStructure & graphStruct){
+  ScTemplate findConnectorTempl;
+  findConnectorTempl.Quintuple(
+    graphStruct,
+    ScType::VarPermPosArc,
+    page,
+    ScType::VarPermPosArc,
+    ScType::VarNodeRole
+  );
+  ScTemplateSearchResult connectorRes;
+  ScAddr rrelConnector;
+  if (m_context.SearchByTemplate(findConnectorTempl, connectorRes)){
+    rrelConnector = m_context.GenerateConnector(ScType::ConstPermPosArc, graphStruct, page);
+  }
+  else{
+    ScIterator3Ptr it3 = m_context.CreateIterator3(
+      graphStruct,
+      ScType::ConstPermPosArc,
+      page
+    );
+    it3->Next();
+    rrelConnector = it3->Get(1);
+
+  }
+
+  return rrelConnector;
+}
+
 ScResult ScHalfDegreeAgent::DoProgram(SuccessfulyGraphCreationEvent const & event, ScAction & action)
 {
   m_logger.Debug("Started collecting pages.");
   GetPagesVector();
   m_logger.Debug("Collected pages successfuly.");
+  ScAddr const & graphStructAddr = event.GetArcTargetElement();
+  ScStructure graphStruct = m_context.ConvertToStructure(graphStructAddr);
 
   int sourceMax = 0, popularMax = 0;
 
@@ -77,49 +107,44 @@ ScResult ScHalfDegreeAgent::DoProgram(SuccessfulyGraphCreationEvent const & even
 
     if (outPages == 0)
     {
-      CreateDeadEndLinks(page);
+      CreateDeadEndRelations(page, graphStruct);
     }
   }
 
-  CreateSourceAndPopularLinks(popularMax, sourceMax);
+  CreateSourceAndPopularRelations(popularMax, sourceMax, graphStruct);
 
   return action.FinishSuccessfully();
 }
 
-void ScHalfDegreeAgent::CreateSourceAndPopularLinks(int const & popularMax, int const & sourceMax)
+void ScHalfDegreeAgent::CreateSourceAndPopularRelations(
+    int const & popularMax,
+    int const & sourceMax,
+    ScStructure & graphStruct)
 {
   auto const & sourceSet = sourcePages_[sourceMax];
+  m_logger.Debug(sourceSet);
   auto const & popularSet = popularPages_[popularMax];
+  m_logger.Debug(popularSet);
 
   for (auto const & sourcePage : sourceSet)
   {
-    ScAddr const & sourcePageLink = m_context.GenerateLink();
-    m_context.SetLinkContent(sourcePageLink, "This page is a source page.");
-    ScAddr sourcePageConnector = m_context.GenerateConnector(ScType::ConstCommonArc, sourcePage, sourcePageLink);
-
-    m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::nrel_source_page, sourcePageConnector);
-    m_logger.Debug("Successfuly create source page for" + m_context.GetElementSystemIdentifier(sourcePage));
+    ScAddr const & rrelSourcePageConnector = GetStructConnector(sourcePage, graphStruct);
+    m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::rrel_source_page, rrelSourcePageConnector);
+    m_logger.Debug("Successfuly create source page for " + m_context.GetElementSystemIdentifier(sourcePage));
   }
 
   for (auto const & popularPage : popularSet)
   {
-    ScAddr const & popularPageLink = m_context.GenerateLink();
-    m_context.SetLinkContent(popularPageLink, "This page is a popular page.");
-    ScAddr popularPageConnector = m_context.GenerateConnector(ScType::ConstCommonArc, popularPage, popularPageLink);
-
-    m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::nrel_popular_page, popularPageConnector);
-    m_logger.Debug("Successfuly create popular page for" + m_context.GetElementSystemIdentifier(popularPage));
+    ScAddr const & rrelPopularPageConnector = GetStructConnector(popularPage, graphStruct);
+    m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::rrel_popular_page, rrelPopularPageConnector);
+    m_logger.Debug("Successfuly create popular page for " + m_context.GetElementSystemIdentifier(popularPage));
   }
 }
 
-void ScHalfDegreeAgent::CreateDeadEndLinks(ScAddr const & page)
+void ScHalfDegreeAgent::CreateDeadEndRelations(ScAddr const & page, ScStructure & graphStruct)
 {
-  ScAddr const & deadEndLink = m_context.GenerateLink();
-  m_context.SetLinkContent(
-      deadEndLink, "This page is a dead-end page which means it doesn't have any outgoing links to other pages.");
-  ScAddr deadEndConnector = m_context.GenerateConnector(ScType::ConstCommonArc, page, deadEndLink);
-
-  m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::nrel_dead_end, deadEndConnector);
+  ScAddr const & rrelConnector = GetStructConnector(page, graphStruct);
+  m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::rrel_dead_end_page, rrelConnector);
   m_logger.Debug("Successfuly found dead end page.");
 }
 

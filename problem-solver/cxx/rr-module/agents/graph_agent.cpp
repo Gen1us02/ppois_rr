@@ -21,6 +21,7 @@ void ScAgentCreateGraph::GetOrCreatePage(ScAddr & pageNode, std::string const & 
     CreateMainIdntf(pageNode, pageName);
     ScAddr const & pageClassConnector =
         m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::concept_page, pageNode);
+    m_logger.Debug("Create page class connector");
     this->pagesIdentificators_[pageName] = pageIdentificator;
     this->next_page++;
   }
@@ -57,6 +58,7 @@ ScResult ScAgentCreateGraph::DoProgram(ScActionInitiatedEvent const & event, ScA
   m_context.GetLinkContent(elementAddr, file_data);
   m_logger.Debug("Ready to create graph");
 
+  ScStructure graphStruct = m_context.GenerateStructure();
   std::vector<std::string> pagesData = Utils::splitData(file_data, "\n");
   for (auto & page : pagesData)
   {
@@ -73,8 +75,8 @@ ScResult ScAgentCreateGraph::DoProgram(ScActionInitiatedEvent const & event, ScA
 
     ScAddr pageNode;
     GetOrCreatePage(pageNode, pageName);
+    graphStruct << pageNode;
     m_logger.Debug("Create page node");
-    m_logger.Debug("Create page class connector");
     ScAddr const & visitorsNode = m_context.GenerateNode(ScType::ConstNode);
     CreateMainIdntf(visitorsNode, visitorsCount);
     m_logger.Debug("Create visitors node");
@@ -102,17 +104,19 @@ ScResult ScAgentCreateGraph::DoProgram(ScActionInitiatedEvent const & event, ScA
       {
         ScAddr nextPageNode;
         GetOrCreatePage(nextPageNode, link);
+        graphStruct << nextPageNode;
         m_logger.Debug("Create next page");
         ScAddr const & linkConnector = m_context.GenerateConnector(ScType::ConstCommonArc, pageNode, nextPageNode);
+        graphStruct << linkConnector;
         m_logger.Debug("Create link between current page and " + link);
         ScAddr const & nrel_linkConnector =
             m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::nrel_link, linkConnector);
+        graphStruct << nrel_linkConnector;
       }
     }
   }
 
-  ScAddr const & firstPage = m_context.SearchElementBySystemIdentifier("page_0");
-  m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::concept_successfuly_created_graph, firstPage);
-  action.SetResult(firstPage);
+  m_context.GenerateConnector(ScType::ConstPermPosArc, ScGraphKeynodes::concept_successfuly_created_graph, graphStruct);
+  action.SetResult(graphStruct);
   return action.FinishSuccessfully();
 }

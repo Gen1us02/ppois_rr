@@ -14,10 +14,11 @@ public:
   ScAddr GetEventSubscriptionElement() const override;
   ScTemplate GetInitiationConditionTemplate(SuccessfulyGraphCreationEvent const & event) const override;
   ScResult DoProgram(SuccessfulyGraphCreationEvent const & event, ScAction & action) override;
+  ScAddr GetStructConnector(ScAddr const & page, ScStructure & graphStruct);
   void GetPagesVector();
   void CreateDegreeLinks(ScAddr const & page, int number, std::string const & type);
-  void CreateDeadEndLinks(ScAddr const & page);
-  void CreateSourceAndPopularLinks(int const & popularMax, int const & sourceMax);
+  void CreateDeadEndRelations(ScAddr const & page, ScStructure & graphStruct);
+  void CreateSourceAndPopularRelations(int const & popularMax, int const & sourceMax, ScStructure & graphStruct);
 
 private:
   ScAddrVector pages_;

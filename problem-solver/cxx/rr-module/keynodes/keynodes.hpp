@@ -19,4 +19,7 @@ public:
   static inline ScKeynode const nrel_dead_end{"nrel_dead_end", ScType::ConstNodeNonRole};
   static inline ScKeynode const nrel_source_page{"nrel_source_page", ScType::ConstNodeNonRole};
   static inline ScKeynode const nrel_popular_page{"nrel_popular_page", ScType::ConstNodeNonRole};
+  static inline ScKeynode const rrel_dead_end_page{"rrel_dead_end_page", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_source_page{"rrel_source_page", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_popular_page{"rrel_popular_page", ScType::ConstNodeRole};
 };
