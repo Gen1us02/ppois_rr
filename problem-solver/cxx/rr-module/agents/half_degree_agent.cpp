@@ -27,29 +27,21 @@ ScTemplate ScHalfDegreeAgent::GetInitiationConditionTemplate(SuccessfulyGraphCre
   return templ;
 }
 
-ScAddr ScHalfDegreeAgent::GetStructConnector(ScAddr const & page, ScStructure & graphStruct){
+ScAddr ScHalfDegreeAgent::GetStructConnector(ScAddr const & page, ScStructure & graphStruct)
+{
   ScTemplate findConnectorTempl;
-  findConnectorTempl.Quintuple(
-    graphStruct,
-    ScType::VarPermPosArc,
-    page,
-    ScType::VarPermPosArc,
-    ScType::VarNodeRole
-  );
+  findConnectorTempl.Quintuple(graphStruct, ScType::VarPermPosArc, page, ScType::VarPermPosArc, ScType::VarNodeRole);
   ScTemplateSearchResult connectorRes;
   ScAddr rrelConnector;
-  if (m_context.SearchByTemplate(findConnectorTempl, connectorRes)){
+  if (m_context.SearchByTemplate(findConnectorTempl, connectorRes))
+  {
     rrelConnector = m_context.GenerateConnector(ScType::ConstPermPosArc, graphStruct, page);
   }
-  else{
-    ScIterator3Ptr it3 = m_context.CreateIterator3(
-      graphStruct,
-      ScType::ConstPermPosArc,
-      page
-    );
+  else
+  {
+    ScIterator3Ptr it3 = m_context.CreateIterator3(graphStruct, ScType::ConstPermPosArc, page);
     it3->Next();
     rrelConnector = it3->Get(1);
-
   }
 
   return rrelConnector;
@@ -152,7 +144,7 @@ void ScHalfDegreeAgent::CreateDegreeLinks(ScAddr const & page, int number, std::
 {
   ScAddr const & degreeLink = m_context.GenerateLink();
   m_context.SetLinkContent(degreeLink, std::to_string(number));
-  ScAddr degreeConnector = m_context.GenerateConnector(ScType::ConstCommonArc, page, degreeLink);
+  ScAddr const & degreeConnector = m_context.GenerateConnector(ScType::ConstCommonArc, page, degreeLink);
 
   if (type == "in")
   {

@@ -2,9 +2,9 @@
 #include <sc-memory/sc_memory_headers.hpp>
 #include "keynodes/keynodes.hpp"
 #include "utils/utils.hpp"
+#include "basevars/basevars.hpp"
 #include <string>
 
-#define DEFAULT_PAGE_NAME "page_"
 
 ScAgentCreateGraph::ScAgentCreateGraph()
 {

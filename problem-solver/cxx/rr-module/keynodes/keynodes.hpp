@@ -5,6 +5,7 @@ class ScGraphKeynodes : public ScKeynodes
 public:
   static inline ScKeynode const action_create_graph{"action_create_graph", ScType::ConstNodeClass};
   static inline ScKeynode const action_calculate_half_degree{"action_calculate_half_degree", ScType::ConstNodeClass};
+  static inline ScKeynode const action_calculate_page_rank{"action_calculate_page_rank", ScType::ConstNodeClass};
   static inline ScKeynode const concept_number{"concept_number", ScType::ConstNodeClass};
   static inline ScKeynode const concept_page{"concept_page", ScType::ConstNodeClass};
   static inline ScKeynode const concept_successfuly_created_graph{
@@ -19,6 +20,7 @@ public:
   static inline ScKeynode const nrel_dead_end{"nrel_dead_end", ScType::ConstNodeNonRole};
   static inline ScKeynode const nrel_source_page{"nrel_source_page", ScType::ConstNodeNonRole};
   static inline ScKeynode const nrel_popular_page{"nrel_popular_page", ScType::ConstNodeNonRole};
+  static inline ScKeynode const nrel_page_rank{"nrel_page_rank", ScType::ConstNodeNonRole};
   static inline ScKeynode const rrel_dead_end_page{"rrel_dead_end_page", ScType::ConstNodeRole};
   static inline ScKeynode const rrel_source_page{"rrel_source_page", ScType::ConstNodeRole};
   static inline ScKeynode const rrel_popular_page{"rrel_popular_page", ScType::ConstNodeRole};

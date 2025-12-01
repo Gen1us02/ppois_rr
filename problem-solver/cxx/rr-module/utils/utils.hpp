@@ -8,4 +8,5 @@ class Utils
 {
 public:
   static std::vector<std::string> splitData(std::string & data, std::string const & sep);
+  static int getPageIndex(std::string const & pageIdtf);
 };
