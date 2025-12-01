@@ -5,7 +5,6 @@
 #include "basevars/basevars.hpp"
 #include <string>
 
-
 ScAgentCreateGraph::ScAgentCreateGraph()
 {
   m_logger = utils::ScLogger(utils::ScLogger::ScLogType::File, "logs/ScAgentCreateGraph.log", utils::ScLogLevel::Debug);
@@ -59,18 +58,18 @@ ScResult ScAgentCreateGraph::DoProgram(ScActionInitiatedEvent const & event, ScA
   m_logger.Debug("Ready to create graph");
 
   ScStructure graphStruct = m_context.GenerateStructure();
-  std::vector<std::string> pagesData = Utils::splitData(file_data, "\n");
+  std::vector<std::string> pagesData = Utils::SplitData(file_data, "\n");
   for (auto & page : pagesData)
   {
     m_logger.Debug(page);
-    std::vector<std::string> pageData = Utils::splitData(page, ";");
+    std::vector<std::string> pageData = Utils::SplitData(page, ";");
     m_logger.Debug(pageData);
     std::string pageName = pageData[0];
     std::string visitorsCount = pageData[1];
     std::string spentTime = pageData[2];
     std::vector<std::string> links;
     if (pageData.size() == 4)
-      links = Utils::splitData(pageData[3], ",");
+      links = Utils::SplitData(pageData[3], ",");
     m_logger.Debug(links);
 
     ScAddr pageNode;

@@ -4,7 +4,6 @@
 #include "utils/utils.hpp"
 #include "basevars/basevars.hpp"
 
-
 ScPageRankAgent::ScPageRankAgent()
 {
   m_logger = utils::ScLogger(utils::ScLogger::ScLogType::File, "logs/ScPageRankAgentLog.log", utils::ScLogLevel::Debug);
@@ -69,12 +68,13 @@ void ScPageRankAgent::CalculatePageRank()
   {
     int outPages = 0;
     ScIterator5Ptr const outPagesIterator = m_context.CreateIterator5(
-      page, ScType::ConstCommonArc, ScType::ConstNode, ScType::ConstPermPosArc, ScGraphKeynodes::nrel_link);
+        page, ScType::ConstCommonArc, ScType::ConstNode, ScType::ConstPermPosArc, ScGraphKeynodes::nrel_link);
     std::string pageIdtf = m_context.GetElementSystemIdentifier(page);
     m_logger.Debug(pageIdtf);
-    int pageIndex = Utils::getPageIndex(pageIdtf);
+    int pageIndex = Utils::GetPageIndex(pageIdtf);
     m_logger.Debug(pageIndex);
-    while(outPagesIterator->Next()){
+    while (outPagesIterator->Next())
+    {
       outPages++;
     }
     out_degree[pageIndex] = outPages;
@@ -106,7 +106,7 @@ void ScPageRankAgent::CalculatePageRank()
 
       while (inPages->Next())
       {
-        int index = Utils::getPageIndex(m_context.GetElementSystemIdentifier(inPages->Get(0)));
+        int index = Utils::GetPageIndex(m_context.GetElementSystemIdentifier(inPages->Get(0)));
         if (out_degree[index] > 0)
         {
           sum_incoming += pr[index] / out_degree[index];
@@ -129,7 +129,7 @@ void ScPageRankAgent::CalculatePageRank()
   for (auto const & page : pages_)
   {
     std::string systemIdtf = m_context.GetElementSystemIdentifier(page);
-    int index = Utils::getPageIndex(systemIdtf);
+    int index = Utils::GetPageIndex(systemIdtf);
     GeneratePageRankLinks(index + 1, pr[index], page);
   }
 }

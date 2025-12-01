@@ -1,7 +1,7 @@
 #include "utils.hpp"
 #include <stdexcept>
 
-std::vector<std::string> Utils::splitData(std::string & data, std::string const & sep)
+std::vector<std::string> Utils::SplitData(std::string & data, std::string const & sep)
 {
   std::vector<std::string> result;
   if (data.empty())
@@ -19,7 +19,7 @@ std::vector<std::string> Utils::splitData(std::string & data, std::string const 
   return result;
 }
 
-int Utils::getPageIndex(std::string const & pageIdtf)
+int Utils::GetPageIndex(std::string const & pageIdtf)
 {
   size_t i = pageIdtf.size() - 1;
   while (i > 0 && pageIdtf[i] != '_')
