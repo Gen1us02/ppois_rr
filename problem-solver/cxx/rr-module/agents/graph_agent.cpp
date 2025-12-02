@@ -50,9 +50,15 @@ ScResult ScAgentCreateGraph::DoProgram(ScActionInitiatedEvent const & event, ScA
   m_logger.Debug("Start action");
   ScIterator5Ptr const it5 = m_context.CreateIterator5(
       action, ScType::ConstCommonArc, ScType::ConstNodeLink, ScType::ConstPermPosArc, ScGraphKeynodes::nrel_file_path);
-  it5->Next();
-  ScAddr const & elementAddr = it5->Get(2);
-  m_logger.Debug("Find link");
+  ScAddr elementAddr;
+  if(it5->Next()){
+    elementAddr = it5->Get(2);
+    m_logger.Debug("Find link");
+  }
+  else{
+    m_logger.Warning("Link not found");
+    return action.FinishUnsuccessfully();
+  }
 
   m_context.GetLinkContent(elementAddr, file_data);
   m_logger.Debug("Ready to create graph");

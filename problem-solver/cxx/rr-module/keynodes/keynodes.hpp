@@ -17,9 +17,6 @@ public:
   static inline ScKeynode const nrel_link{"nrel_link", ScType::ConstNodeNonRole};
   static inline ScKeynode const nrel_out_degree{"nrel_out_degree", ScType::ConstNodeNonRole};
   static inline ScKeynode const nrel_in_degree{"nrel_in_degree", ScType::ConstNodeNonRole};
-  static inline ScKeynode const nrel_dead_end{"nrel_dead_end", ScType::ConstNodeNonRole};
-  static inline ScKeynode const nrel_source_page{"nrel_source_page", ScType::ConstNodeNonRole};
-  static inline ScKeynode const nrel_popular_page{"nrel_popular_page", ScType::ConstNodeNonRole};
   static inline ScKeynode const nrel_page_rank{"nrel_page_rank", ScType::ConstNodeNonRole};
   static inline ScKeynode const rrel_dead_end_page{"rrel_dead_end_page", ScType::ConstNodeRole};
   static inline ScKeynode const rrel_source_page{"rrel_source_page", ScType::ConstNodeRole};

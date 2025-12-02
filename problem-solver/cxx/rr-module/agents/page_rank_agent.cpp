@@ -124,7 +124,8 @@ void ScPageRankAgent::CalculatePageRank()
     pageRanks_[pr[N]] = DEFAULT_PAGE_NAME + std::to_string(i);
   }
 
-  std::sort(pr.begin(), pr.end());
+  std::sort(pr.begin(), pr.end(), std::greater<double>());
+  m_logger.Debug(pr);
 
   for (auto const & page : pages_)
   {

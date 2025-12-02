@@ -35,4 +35,16 @@ find_package(sc-machine REQUIRED)
 find_package(scl-machine REQUIRED)
 find_package(ps-common-lib REQUIRED)
 
+option(ENABLE_COVERAGE "Enable coverage" OFF)
+
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/problem-solver)
+
+if(ENABLE_COVERAGE
+   AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    foreach(tgt
+          rr-module
+          site-agents-tests)
+    target_compile_options(${tgt} PRIVATE --coverage -O0 -g)
+    target_link_options(${tgt} PRIVATE --coverage)
+    endforeach()
+endif()
