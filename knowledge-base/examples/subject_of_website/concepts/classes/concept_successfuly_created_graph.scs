@@ -1,0 +1,7 @@
+concept_successfuly_created_graph
+<- sc_node_class;
+=> nrel_main_idtf:
+    [успешно созданный граф]
+    (*
+        <- lang_ru;;
+    *);;

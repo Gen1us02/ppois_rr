@@ -1,0 +1,12 @@
+action_calculate_half_degree
+<- sc_node_class;
+<- concept_class;
+=> nrel_main_idtf:
+    [действие подсчета полу-степеней входа и выхода]
+    (* 
+        <- lang_ru;;
+    *);
+    [action to calculate half degrees]
+    (*
+        <- lang_en;;
+    *);;

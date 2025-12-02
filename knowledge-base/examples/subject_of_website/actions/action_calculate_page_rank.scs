@@ -1,0 +1,12 @@
+action_calculate_page_rank
+<- sc_node_class;
+<- concept_class;
+=> nrel_main_idtf:
+    [действие подсчета ранга страниц]
+    (* 
+        <- lang_ru;;
+    *);
+    [action to calculate page rank]
+    (*
+        <- lang_en;;
+    *);;
